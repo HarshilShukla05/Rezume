@@ -1,0 +1,20 @@
+# Normalize line endings for all text files
+* text=auto
+
+# Specific rules for TypeScript files
+*.ts text eol=lf
+
+# JSON files
+*.json text eol=lf
+
+# Markdown files
+*.md text eol=lf
+
+# CSS files
+*.css text eol=lf
+
+# JavaScript files
+*.js text eol=lf
+
+# Ignore node_modules
+node_modules/** -text
