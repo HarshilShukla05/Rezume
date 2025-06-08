@@ -1,68 +1,88 @@
 "use client";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
+import TailoredResume from "./TailoredResume";
 
 export default function FileUploader() {
     const [resume, setResume] = useState<File | null>(null);
     const [jd, setJD] = useState("");
+    const [tailoredResume, setTailoredResume] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [showPreview, setShowPreview] = useState(false);
 
-    const [tailoredResume, setTailoredResume] = useState('');
-
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
+    const generateTailoredResume = async () => {
         if (!resume || !jd) return alert("Upload resume and enter JD!");
 
         const formData = new FormData();
         formData.append("resume", resume);
         formData.append("jd", jd);
 
-        const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/upload-resume`, {
-            method: "POST",
-            body: formData,
-        });
-
-        const data = await res.json();
-        console.log(data);
-
-        console.log("Submitting to /upload-resume");
-
+        setLoading(true);
         try {
-            const response = await axios.post("http://localhost:4000/upload-resume", formData, {
-                headers: { "Content-Type": "multipart/form-data" },
-            });
-            console.log("Response from backend:", response.data);
+            const response = await axios.post(
+                `${process.env.NEXT_PUBLIC_API_URL}/api/upload-resume`,
+                formData,
+                {
+                    headers: { "Content-Type": "multipart/form-data" },
+                }
+            );
+
             const responseData = response.data as { tailoredResume: string };
-            setTailoredResume(responseData.tailoredResume);
+            if (responseData && responseData.tailoredResume) {
+                setTailoredResume(responseData.tailoredResume); // Update state with tailored resume
+                setShowPreview(true); // Show preview
+            } else {
+                alert("Failed to generate tailored resume. Please try again.");
+            }
         } catch (error) {
             console.error("Submission failed:", error);
+            alert("An error occurred while generating the tailored resume.");
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        generateTailoredResume();
+    };
+
+    const handleRegenerate = () => {
+        generateTailoredResume();
+    };
+
     return (
-        <div className="p-6 bg-white rounded-xl shadow-md space-y-4 w-full max-w-lg">
-            <h2 className="text-xl font-semibold">Upload Resume & Job Description</h2>
-            <input
-                type="file"
-                accept=".pdf,.doc,.docx,.txt"
-                onChange={(e) => setResume(e.target.files?.[0] || null)}
-            />
-            <textarea
-                rows={6}
-                placeholder="Paste the job description here..."
-                className="w-full border rounded p-2"
-                onChange={(e) => setJD(e.target.value)}
-            />
-            <button
-                onClick={handleSubmit}
-                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            >
-                Submit
-            </button>
-            {tailoredResume && (
-                <div className="mt-4 p-4 bg-gray-100 rounded">
-                    <h3 className="font-semibold">Tailored Resume:</h3>
-                    <pre className="whitespace-pre-wrap">{tailoredResume}</pre>
-                </div>
+        <div className="p-6 bg-white rounded-xl shadow-md space-y-4 w-full max-w-2xl mx-auto">
+            <h2 className="text-2xl font-semibold">Upload Resume & Job Description</h2>
+
+            <form onSubmit={handleSubmit} className="space-y-4">
+                <input
+                    type="file"
+                    accept=".pdf,.doc,.docx,.txt"
+                    onChange={(e) => setResume(e.target.files?.[0] || null)}
+                    className="w-full border p-2"
+                />
+
+                <textarea
+                    rows={6}
+                    placeholder="Paste the job description here..."
+                    className="w-full border rounded p-2"
+                    value={jd}
+                    onChange={(e) => setJD(e.target.value)}
+                />
+
+                <button
+                    type="submit"
+                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
+                    disabled={loading}
+                >
+                    {loading ? "Submitting..." : "Submit"}
+                </button>
+            </form>
+
+            {/* ✅ Use TailoredResume component to preview */}
+            {showPreview && tailoredResume && (
+                <TailoredResume content={tailoredResume} onRegenerate={handleRegenerate} />
             )}
         </div>
     );

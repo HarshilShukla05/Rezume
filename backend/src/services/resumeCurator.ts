@@ -3,7 +3,19 @@ import axios from 'axios';
 
 export const curateResume = async (resume: string, jd: string): Promise<string> => {
     const prompt = `
-You are an expert career coach. Given the following resume and job description, rewrite the resume to better match the job:
+You are a professional resume writer.
+
+Your task is to rewrite the resume provided below to better match the given job description. You should:
+
+1. Highlight relevant skills and achievements.
+2. Remove unrelated content.
+3. Keep the tone professional and ATS-friendly.
+4. Preserve the original structure (sections, order) but enhance clarity.
+
+⚠️ Format the result in **markdown**, using:
+- \`##\` or \`###\` for section headings
+- \`-\` for bullet points
+- \`**bold**\` for important info
 
 Resume:
 ${resume}

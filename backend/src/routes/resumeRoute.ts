@@ -48,18 +48,15 @@ router.post('/upload-resume', upload.single('resume'), async (req: Request, res:
         const tailoredResume = await curateResume(text, jobDescription);
         console.log("Tailored Resume generated:", tailoredResume);
 
-        // Next step: Send this text + JD to OpenAI (or return now for test)
+        // Ensure tailoredResume is included in the response
         res.json({
             message: 'Resume parsed successfully',
-            resumeText: text.slice(0, 1000), // sample preview
-            jd: jobDescription,
+            tailoredResume, // Include tailored resume in the response
         });
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to parse resume' });
     }
-    
-    
 });
 
 
