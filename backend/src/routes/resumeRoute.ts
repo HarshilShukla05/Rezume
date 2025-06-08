@@ -12,6 +12,8 @@ const router = express.Router();
 const upload = multer({ dest: 'uploads/' });
 
 router.post('/upload-resume', upload.single('resume'), async (req: Request, res: Response): Promise<void> => {
+    console.log('Received file:', req.file);
+    console.log('Received job description:', req.body.jd);
     const file = req.file;
     const jobDescription = req.body.jd;
 
@@ -44,6 +46,7 @@ router.post('/upload-resume', upload.single('resume'), async (req: Request, res:
         fs.unlinkSync(file.path);
 
         const tailoredResume = await curateResume(text, jobDescription);
+        console.log("Tailored Resume generated:", tailoredResume);
 
         // Next step: Send this text + JD to OpenAI (or return now for test)
         res.json({

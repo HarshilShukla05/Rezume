@@ -1,26 +1,38 @@
-import openai from "../utils/openai";
+// backend/src/services/resumeCurator.ts
+import axios from 'axios';
 
-export async function curateResume(resumeText: string, jobDescription: string): Promise<string> {
-  const systemPrompt = `
-You are a professional resume writer. The user will provide their resume content and a job description. Rewrite the resume to tailor it for the given job, keeping it ATS-friendly and professional. Improve wording, highlight relevant skills and experience, and remove unrelated content. Keep the resume clean and well-structured.
-`;
+export const curateResume = async (resume: string, jd: string): Promise<string> => {
+    const prompt = `
+You are an expert career coach. Given the following resume and job description, rewrite the resume to better match the job:
 
-  const userPrompt = `
+Resume:
+${resume}
+
 Job Description:
-${jobDescription}
+${jd}
 
-Original Resume:
-${resumeText}
+Tailored Resume:
 `;
 
-  const chatCompletion = await openai.chat.completions.create({
-    model: "gpt-4",
-    messages: [
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt },
-    ],
-    temperature: 0.7,
-  });
+    try {
+        const response = await axios.post(
+            'https://api.groq.com/openai/v1/chat/completions',
+            {
+                model: 'meta-llama/llama-4-scout-17b-16e-instruct', // or 'llama3-70b-8192'
+                messages: [{ role: 'user', content: prompt }],
+                temperature: 0.7,
+            },
+            {
+                headers: {
+                    'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+                    'Content-Type': 'application/json',
+                },
+            }
+        );
 
-  return chatCompletion.choices[0].message.content || "";
-}
+        return response.data.choices[0].message.content.trim();
+    } catch (error: any) {
+        console.error('Error from Groq API:', error.response?.data || error.message);
+        return 'Failed to generate tailored resume.';
+    }
+};

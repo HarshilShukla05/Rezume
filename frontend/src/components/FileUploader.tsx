@@ -1,5 +1,6 @@
 "use client";
 import { useState } from "react";
+import axios from "axios";
 
 export default function FileUploader() {
     const [resume, setResume] = useState<File | null>(null);
@@ -22,6 +23,19 @@ export default function FileUploader() {
 
         const data = await res.json();
         console.log(data);
+
+        console.log("Submitting to /upload-resume");
+
+        try {
+            const response = await axios.post("http://localhost:4000/upload-resume", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+            });
+            console.log("Response from backend:", response.data);
+            const responseData = response.data as { tailoredResume: string };
+            setTailoredResume(responseData.tailoredResume);
+        } catch (error) {
+            console.error("Submission failed:", error);
+        }
     };
 
     return (
