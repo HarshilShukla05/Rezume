@@ -52,7 +52,8 @@ export default function FileUploader() {
     };
 
     return (
-        <div className="p-6 bg-white rounded-xl shadow-md space-y-4 w-full max-w-2xl mx-auto">
+        <div className="p-8 bg-white rounded-2xl shadow-lg space-y-6 w-full max-w-3xl mx-auto border border-gray-200">
+
             <h2 className="text-2xl font-semibold">Upload Resume & Job Description</h2>
 
             <form onSubmit={handleSubmit} className="space-y-4">
