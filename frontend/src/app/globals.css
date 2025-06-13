@@ -46,7 +46,7 @@ body {
 .prose h1, .prose h2, .prose h3 {
   color: #2a2a40;
   font-weight: 700;
-  margin-top: 1.5em;
+  margin-top: 1em; /* was 1.5em, reduced for less space above headings */
   margin-bottom: 0.5em;
 }
 .prose ul, .prose ol {
@@ -66,4 +66,35 @@ body {
 }
 .prose a:hover {
   color: #1d4ed8;
+}
+
+/* Optional: Custom slide/transition helpers if needed */
+.slide-left {
+  transform: translateX(-55%);
+  opacity: 0.8;
+  transition: all 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.slide-right {
+  transform: translateX(0);
+  opacity: 1;
+  transition: all 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+.slide-offscreen {
+  transform: translateX(100vw);
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.7s cubic-bezier(0.4,0,0.2,1);
+}
+
+.hero-animate-in {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.5s, transform 0.5s;
+}
+.hero-animate-out {
+  opacity: 0;
+  transform: translateY(-40px);
+  pointer-events: none;
+  transition: opacity 0.5s, transform 0.5s;
 }

@@ -5,7 +5,7 @@ export const curateResume = async (resume: string, jd: string): Promise<string> 
     const prompt = `
 You are a professional resume writer.
 
-Your task is to rewrite the resume provided below to better match the given job description. You should:
+Your task is to rewrite the resume provided below to better match the given job description . You should:
 
 1. Highlight relevant skills and achievements.
 2. Remove unrelated content.

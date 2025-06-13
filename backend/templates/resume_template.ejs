@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Tailored Resume</title>
+  <style>
+    body {
+      font-family: "Georgia", serif;
+      color: #111;
+      max-width: 800px;
+      margin: auto;
+      padding: 40px;
+      line-height: 1.6;
+    }
+    h1, h2 {
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+      margin-top: 2em;
+      color: #2c3e50;
+    }
+    h1 {
+      font-size: 28px;
+      margin-top: 0;
+    }
+    ul {
+      list-style-type: disc;
+      padding-left: 20px;
+    }
+    section {
+      margin-bottom: 2em;
+    }
+  </style>
+</head>
+<body>
+  <h1><%= name %></h1>
+
+  <% if (experience) { %>
+    <section>
+      <h2>Experience</h2>
+      <div><%- experience %></div>
+    </section>
+  <% } %>
+
+  <% if (projects) { %>
+    <section>
+      <h2>Projects</h2>
+      <div><%- projects %></div>
+    </section>
+  <% } %>
+
+  <% if (education) { %>
+    <section>
+      <h2>Education</h2>
+      <div><%- education %></div>
+    </section>
+  <% } %>
+
+  <% if (skills) { %>
+    <section>
+      <h2>Technical Skills</h2>
+      <div><%- skills %></div>
+    </section>
+  <% } %>
+</body>
+</html>

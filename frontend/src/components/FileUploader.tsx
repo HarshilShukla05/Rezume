@@ -1,9 +1,15 @@
 "use client";
 import React, { useState } from "react";
-import axios from "axios";
 import TailoredResume from "./TailoredResume";
+import axios from "axios";
 
-export default function FileUploader() {
+
+interface FileUploaderProps {
+    onResult: () => void;
+    animate: boolean;
+}
+
+const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate }) => {
     const [resume, setResume] = useState<File | null>(null);
     const [jd, setJD] = useState("");
     const [tailoredResume, setTailoredResume] = useState("");
@@ -29,8 +35,9 @@ export default function FileUploader() {
 
             const responseData = response.data as { tailoredResume: string };
             if (responseData && responseData.tailoredResume) {
-                setTailoredResume(responseData.tailoredResume); // Update state with tailored resume
-                setShowPreview(true); // Show preview
+                setTailoredResume(responseData.tailoredResume);
+                setShowPreview(true);
+                onResult(); // Notify parent to animate
             } else {
                 alert("Failed to generate tailored resume. Please try again.");
             }
@@ -38,7 +45,7 @@ export default function FileUploader() {
             console.error("Submission failed:", error);
             alert("An error occurred while generating the tailored resume.");
         } finally {
-            setLoading(false); // Stop loading
+            setLoading(false);
         }
     };
 
@@ -52,39 +59,58 @@ export default function FileUploader() {
     };
 
     return (
-        <div className="p-8 bg-white rounded-2xl shadow-lg space-y-6 w-full max-w-3xl mx-auto border border-gray-200">
-
-            <h2 className="text-2xl font-semibold">Upload Resume & Job Description</h2>
-
-            <form onSubmit={handleSubmit} className="space-y-4">
-                <input
-                    type="file"
-                    accept=".pdf,.doc,.docx,.txt"
-                    onChange={(e) => setResume(e.target.files?.[0] || null)}
-                    className="w-full border p-2"
-                />
-
-                <textarea
-                    rows={6}
-                    placeholder="Paste the job description here..."
-                    className="w-full border rounded p-2"
-                    value={jd}
-                    onChange={(e) => setJD(e.target.value)}
-                />
-
-                <button
-                    type="submit"
-                    className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full"
-                    disabled={loading}
-                >
-                    {loading ? "Submitting..." : "Submit"}
-                </button>
-            </form>
-
-            {/* ✅ Use TailoredResume component to preview */}
-            {showPreview && tailoredResume && (
-                <TailoredResume content={tailoredResume} onRegenerate={handleRegenerate} />
-            )}
+        <div className="flex flex-col items-center justify-center w-full min-h-[500px] py-8">
+            {/* Input Form */}
+            <div
+                className={`
+                    transition-all duration-700 ease-in-out
+                    ${animate ? "opacity-0 scale-95 pointer-events-none" : "opacity-100 scale-100"}
+                    w-full max-w-xl
+                    z-20
+                `}
+            >
+                <div className="p-8 bg-white rounded-2xl shadow-2xl space-y-6 w-full border border-gray-200">
+                    <h2 className="text-2xl font-semibold text-center">Upload Resume & Job Description</h2>
+                    <form onSubmit={handleSubmit} className="space-y-4">
+                        <input
+                            type="file"
+                            accept=".pdf,.doc,.docx,.txt"
+                            onChange={(e) => setResume(e.target.files?.[0] || null)}
+                            className="w-full border p-2 rounded"
+                        />
+                        <textarea
+                            rows={6}
+                            placeholder="Paste the job description here..."
+                            className="w-full border rounded p-2"
+                            value={jd}
+                            onChange={(e) => setJD(e.target.value)}
+                        />
+                        <button
+                            type="submit"
+                            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 w-full font-semibold shadow"
+                            disabled={loading}
+                        >
+                            {loading ? "Submitting..." : "Submit"}
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {/* Tailored Resume Result */}
+            <div
+                className={`
+                    transition-all duration-700 ease-in-out
+                    ${animate && showPreview
+                        ? "opacity-100 scale-100 mt-8"
+                        : "opacity-0 scale-95 pointer-events-none"}
+                    w-full max-w-2xl z-30
+                `}
+            >
+                {showPreview && tailoredResume && (
+                    <TailoredResume content={tailoredResume} onRegenerate={handleRegenerate} />
+                )}
+            </div>
         </div>
     );
-}
+};
+
+export default FileUploader;
