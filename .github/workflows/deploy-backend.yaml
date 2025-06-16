@@ -35,8 +35,8 @@ jobs:
       with:
         project_id: ${{ secrets.GCP_PROJECT_ID }}
 
-    - name: Configure Docker
-      run: gcloud auth configure-docker
+    # - name: Configure Docker
+    #   run: gcloud auth configure-docker
     
     - name: Docker login to Artifact Registry
       run: |
