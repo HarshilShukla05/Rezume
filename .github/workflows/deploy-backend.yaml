@@ -50,8 +50,9 @@ jobs:
     - name: Deploy to Cloud Run
       run: |
         gcloud run deploy rezume-backend \
-          --image gcr.io/${{ secrets.GCP_PROJECT_ID }}/rezume-backend:$GITHUB_SHA \
-          --platform managed \
-          --region ${{ secrets.GCP_REGION }} \
-          --allow-unauthenticated \
-          --port 4000
+            --image us-docker.pkg.dev/rezume-462805/rezume-backend/rezume-backend:$GITHUB_SHA \
+            --platform managed \
+            --region asia-south1 \
+            --allow-unauthenticated \
+            --port 4000
+
