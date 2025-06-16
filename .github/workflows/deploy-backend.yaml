@@ -37,7 +37,11 @@ jobs:
 
     - name: Configure Docker
       run: gcloud auth configure-docker
-
+    
+    - name: Docker login to Artifact Registry
+      run: |
+        gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://us-docker.pkg.dev
+        
     - name: Build and push Docker image
       run: |
         docker build -t us-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/rezume-backend/rezume-backend:$GITHUB_SHA .
