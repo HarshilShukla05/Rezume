@@ -2,15 +2,13 @@
 import React, { useState } from "react";
 import TailoredResume from "./TailoredResume";
 import axios from "axios";
-import { RefObject } from "react";
+
 
 interface FileUploaderProps {
     onResult: () => void;
-    resultRef: RefObject<HTMLDivElement | null>;
+    resultRef: React.RefObject<HTMLDivElement>;
     animate: boolean;
 }
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRef }) => {
     const [resume, setResume] = useState<File | null>(null);
@@ -29,7 +27,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
         setLoading(true);
         try {
             const response = await axios.post(
-                `${API_URL}/api/upload-resume`,
+                `${process.env.NEXT_PUBLIC_API_URL}/api/upload-resume`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -99,7 +97,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
                 </div>
             </div>
             {/* Tailored Resume Result */}
-            <div
+            <div ref={resultRef}
                 className={`
                     transition-all duration-700 ease-in-out
                     ${animate && showPreview
