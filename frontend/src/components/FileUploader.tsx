@@ -26,10 +26,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
 
         setLoading(true);
         try {
-            const apiUrl = process.env.NEXT_PUBLIC_API_URL || "";
-            // console.log("API URL:", apiUrl); // Uncomment for debugging
             const response = await axios.post(
-                `${apiUrl}/api/upload-resume`,
+
+                `${process.env.NEXT_PUBLIC_API_URL}/api/upload-resume`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
