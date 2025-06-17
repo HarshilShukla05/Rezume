@@ -2,14 +2,15 @@
 import React, { useState } from "react";
 import TailoredResume from "./TailoredResume";
 import axios from "axios";
-
+import { RefObject } from "react";
 
 interface FileUploaderProps {
     onResult: () => void;
+    resultRef: RefObject<HTMLDivElement | null>;
     animate: boolean;
 }
 
-const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRef }) => {
     const [resume, setResume] = useState<File | null>(null);
     const [jd, setJD] = useState("");
     const [tailoredResume, setTailoredResume] = useState("");
