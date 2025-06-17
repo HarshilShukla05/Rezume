@@ -1,12 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, RefObject } from "react";
 import TailoredResume from "./TailoredResume";
 import axios from "axios";
 
-
 interface FileUploaderProps {
     onResult: () => void;
-    resultRef: React.RefObject<HTMLDivElement>;
+    resultRef?: RefObject<HTMLDivElement | null>;
     animate: boolean;
 }
 
