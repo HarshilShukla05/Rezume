@@ -12,12 +12,6 @@ interface FileUploaderProps {
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-if (!API_URL) {
-    // Add a helpful log for debugging
-    console.error('NEXT_PUBLIC_API_URL is not set. Please check your .env.local file in the frontend directory.');
-    throw new Error('NEXT_PUBLIC_API_URL is not set. Please check your .env.local file in the frontend directory.');
-}
-
 const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRef }) => {
     const [resume, setResume] = useState<File | null>(null);
     const [jd, setJD] = useState("");
