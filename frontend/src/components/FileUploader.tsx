@@ -10,6 +10,14 @@ interface FileUploaderProps {
     animate: boolean;
 }
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
+if (!API_URL) {
+    // Add a helpful log for debugging
+    console.error('NEXT_PUBLIC_API_URL is not set. Please check your .env.local file in the frontend directory.');
+    throw new Error('NEXT_PUBLIC_API_URL is not set. Please check your .env.local file in the frontend directory.');
+}
+
 const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRef }) => {
     const [resume, setResume] = useState<File | null>(null);
     const [jd, setJD] = useState("");
@@ -27,8 +35,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
         setLoading(true);
         try {
             const response = await axios.post(
-
-                `${process.env.NEXT_PUBLIC_API_URL}/api/upload-resume`,
+                `${API_URL}/api/upload-resume`,
                 formData,
                 {
                     headers: { "Content-Type": "multipart/form-data" },
@@ -99,7 +106,6 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
             </div>
             {/* Tailored Resume Result */}
             <div
-                ref={resultRef}
                 className={`
                     transition-all duration-700 ease-in-out
                     ${animate && showPreview
