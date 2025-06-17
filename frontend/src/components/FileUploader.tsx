@@ -98,6 +98,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
             </div>
             {/* Tailored Resume Result */}
             <div
+                ref={resultRef}
                 className={`
                     transition-all duration-700 ease-in-out
                     ${animate && showPreview
