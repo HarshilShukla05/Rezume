@@ -11,6 +11,11 @@ const router = express.Router();
 
 const upload = multer({ dest: 'uploads/' });
 
+// Add a health check route for debugging
+router.get('/health', (_, res) => {
+    res.json({ status: 'ok' });
+});
+
 router.post('/upload-resume', upload.single('resume'), async (req: Request, res: Response): Promise<void> => {
     console.log('Received file:', req.file);
     console.log('Received job description:', req.body.jd);
@@ -58,7 +63,5 @@ router.post('/upload-resume', upload.single('resume'), async (req: Request, res:
         res.status(500).json({ message: 'Failed to parse resume' });
     }
 });
-
-
 
 export default router;
