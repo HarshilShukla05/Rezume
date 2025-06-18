@@ -40,7 +40,7 @@ jobs:
 
     - name: Build and push Docker image
       run: |
-        docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/frontend:$GITHUB_SHA .
+        NEXT_PUBLIC_API_URL=https://rezume-backend-195685071981.asia-south1.run.app docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/rezume-frontend:$GITHUB_SHA .
         docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/frontend:$GITHUB_SHA
 
     - name: Deploy to Cloud Run
