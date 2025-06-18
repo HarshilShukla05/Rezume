@@ -44,9 +44,9 @@ jobs:
       run: |
         docker build \
           --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
-          -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/rezume-frontend:$GITHUB_SHA \
+          -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/frontend:$GITHUB_SHA \
           .
-        docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/rezume-frontend:$GITHUB_SHA
+        docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/frontend:$GITHUB_SHA
 
     - name: Deploy to Cloud Run
       run: |
