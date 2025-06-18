@@ -17,5 +17,7 @@ RUN npm run build
 # Expose port
 EXPOSE 3000
 
+ENV NODE_ENV=production
+
 # Start production server
 CMD ["npm", "start"]
