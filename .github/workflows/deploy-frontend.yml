@@ -39,9 +39,14 @@ jobs:
       run: gcloud auth configure-docker asia-south1-docker.pkg.dev
 
     - name: Build and push Docker image
+      env:
+        NEXT_PUBLIC_API_URL: https://rezume-backend-195685071981.asia-south1.run.app
       run: |
-        NEXT_PUBLIC_API_URL=https://rezume-backend-195685071981.asia-south1.run.app docker build -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/frontend:$GITHUB_SHA .
-        docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/frontend:$GITHUB_SHA
+        docker build \
+          --build-arg NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL \
+          -t asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/rezume-frontend:$GITHUB_SHA \
+          .
+        docker push asia-south1-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/resume-frontend/rezume-frontend:$GITHUB_SHA
 
     - name: Deploy to Cloud Run
       run: |
