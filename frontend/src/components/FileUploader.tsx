@@ -41,6 +41,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ onResult, animate, resultRe
             } else {
                 alert("Failed to generate tailored resume. Please try again.");
             }
+            console.log("API raw response:", response);
+            console.log("Extracted data:", responseData);
+
         } catch (error) {
             console.error("Submission failed:", error);
             alert("An error occurred while generating the tailored resume.");
